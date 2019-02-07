@@ -1959,6 +1959,20 @@ public abstract class AnySoftKeyboard extends AnySoftKeyboardIncognito {
                 mAdditionalCharacterForReverting = true;
                 setSpaceTimeStamp(true);
                 TextEntryState.typedCharacter(' ', true);
+
+                //checks for a function being written and will put cursor between the ().
+                if (suggestion.toString().contains(")")){
+                    sendDownUpKeyEvents(KeyEvent.KEYCODE_DPAD_LEFT);
+                    sendDownUpKeyEvents(KeyEvent.KEYCODE_DPAD_LEFT);
+                }
+                if(suggestion.toString().contains(":")){
+                    sendDownUpKeyEvents(KeyEvent.KEYCODE_ENTER);
+                    sendDownUpKeyEvents(KeyEvent.KEYCODE_SPACE);
+                    sendDownUpKeyEvents(KeyEvent.KEYCODE_SPACE);
+                    sendDownUpKeyEvents(KeyEvent.KEYCODE_SPACE);
+
+
+                }
             }
             // Add the word to the auto dictionary if it's not a known word
             mJustAutoAddedWord = false;

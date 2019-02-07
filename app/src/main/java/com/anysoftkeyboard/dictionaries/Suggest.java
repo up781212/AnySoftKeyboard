@@ -42,6 +42,15 @@ public class Suggest {
     @NonNull
     private final SuggestionsProvider mSuggestionsProvider;
     private final List<CharSequence> mSuggestions = new ArrayList<>();
+    private final List<CharSequence> mSuggestionsFinal = new ArrayList<>();
+
+
+    //added new stuff here!
+    private final List<CharSequence> mPSuggestions = new ArrayList<>();
+    private  List<CharSequence> mVariablesSaved = new ArrayList<>();
+    private  List<CharSequence> mPotentialVariables = new ArrayList<>();
+
+
     private final List<CharSequence> mNextSuggestions = new ArrayList<>();
     private final List<CharSequence> mStringPool = new ArrayList<>();
     private final List<String> mExplodedAbbreviations = new ArrayList<>();
@@ -49,6 +58,8 @@ public class Suggest {
         mExplodedAbbreviations.add(new String(word, wordOffset, wordLength));
         return true;
     };
+
+
 
     @NonNull
     private Locale mLocale = Locale.getDefault();
@@ -62,6 +73,11 @@ public class Suggest {
     private String mLowerOriginalWord;
     private boolean mIsFirstCharCapitalized;
     private boolean mIsAllUpperCase;
+
+
+
+
+
     private final Dictionary.WordCallback mTypingDictionaryWordCallback = new Dictionary.WordCallback() {
         @Override
         public boolean addWord(char[] word, int wordOffset, int wordLength, int frequency, Dictionary from) {
@@ -111,6 +127,9 @@ public class Suggest {
     private int mCommonalityMaxLengthDiff = 1;
     private int mCommonalityMaxDistance = 1;
     private boolean mEnabledSuggestions;
+    private boolean mAddedWord = true;
+
+
 
     @VisibleForTesting Suggest(@NonNull SuggestionsProvider provider) {
         mSuggestionsProvider = provider;
@@ -119,6 +138,39 @@ public class Suggest {
 
     public Suggest(@NonNull Context context) {
         this(new SuggestionsProvider(context));
+        mPSuggestions.add("if"); //This creates the dictionary used for programming suggestions. Order inserted into list is frequency used from github top python projects
+        mPSuggestions.add("for");
+        mPSuggestions.add("while");
+        mPSuggestions.add("do");
+        mPSuggestions.add("def");
+        mPSuggestions.add("and");
+        mPSuggestions.add("or");
+        mPSuggestions.add("not");
+        mPSuggestions.add("print()");
+        mPSuggestions.add("len()");
+        mPSuggestions.add("join()");
+        mPSuggestions.add("split()");
+        mPSuggestions.add("sorted()");
+        mPSuggestions.add("range()");
+        mPSuggestions.add("map()");
+        mPSuggestions.add("str()");
+        mPSuggestions.add("type()");
+        mPSuggestions.add("repr()");
+        mPSuggestions.add("enumerate()");
+        mPSuggestions.add("pop()");
+        mPSuggestions.add("abs()");
+        mPSuggestions.add("in");
+        mPSuggestions.add("return");
+        mPSuggestions.add("True");
+        mPSuggestions.add("False");
+        mPSuggestions.add("import");
+        mPSuggestions.add("filter");
+        mPSuggestions.add("main");
+
+        mVariablesSaved.add("Hello");
+
+
+
     }
 
     private static boolean compareCaseInsensitive(
@@ -229,6 +281,7 @@ public class Suggest {
         } else {
             Logger.d(TAG, "getNextSuggestions for '%s' is invalid.");
         }
+
         return mNextSuggestions;
     }
 
@@ -238,6 +291,38 @@ public class Suggest {
      *
      * @return list of suggestions.
      */
+
+
+
+
+    /*
+
+
+    THIS AREA FOR EDITING THE SUGGESTIONS
+    THIS AREA FOR EDITING THE SUGGESTIONS
+
+
+     */
+    public List<CharSequence> getSuggestions(WordComposer wordComposer, boolean includeTypedWordIfValid) {
+        if (!mEnabledSuggestions) return Collections.emptyList();
+        mSuggestionsFinal.clear();
+        mSuggestionsFinal.add(wordComposer.getTypedWord());//always has first entry as the current word (prevents issues and
+        for(CharSequence item : mPSuggestions){
+            String sItem = (String)item;
+            if(sItem.contains(wordComposer.getTypedWord())) {
+                mSuggestionsFinal.add(sItem);
+            }
+        }
+        for(CharSequence item : mVariablesSaved){
+            String ssItem = (String) item;
+            if(ssItem.contains(wordComposer.getTypedWord())){
+                mSuggestionsFinal.add(ssItem);
+            }
+        }
+
+        return mSuggestionsFinal;
+    }
+    /*
     public List<CharSequence> getSuggestions(WordComposer wordComposer, boolean includeTypedWordIfValid) {
         if (!mEnabledSuggestions) return Collections.emptyList();
 
@@ -325,8 +410,11 @@ public class Suggest {
         if (mHaveCorrection && mSuggestions.size() > 1 && mExplodedAbbreviations.size() == 0 && !haveSufficientCommonality(mLowerOriginalWord, mSuggestions.get(1))) {
             mHaveCorrection = false;
         }
+        mSuggestions.clear();
+        mSuggestions.add("I love you!");
         return mSuggestions;
     }
+    */
 
     public boolean hasMinimalCorrection() {
         return mHaveCorrection;

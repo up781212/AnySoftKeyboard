@@ -1,4 +1,10 @@
-AnySoftKeyboard
+AnySoftKeyboard + Python
+====================
+Additions to AnySoftKeyboard have been made to suggest Python keywords as well as other nice additions for writing Python scripts on Android. 
+Future additions will include correction of misspellings and context-based suggestions. Currently, suggestions are implemented but do not take the context of the current suggestion into account. For example by determining that a variable may be used where the cursor currently is or by not suggesting "def" when writing in a function. 
+
+
+The original README.md is below.
 ====================
 `master` latest build: [![CircleCI](https://circleci.com/gh/AnySoftKeyboard/AnySoftKeyboard/tree/master.svg?style=svg)](https://circleci.com/gh/AnySoftKeyboard/AnySoftKeyboard/tree/master)<br/>
 `master` coverage: [![codecov](https://codecov.io/gh/AnySoftKeyboard/AnySoftKeyboard/branch/master/graph/badge.svg)](https://codecov.io/gh/AnySoftKeyboard/AnySoftKeyboard)<br/>
